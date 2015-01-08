@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My AngularJS App</title>
+    <meta name="description" content="">
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="app.css">
+  </head>
+  <body ng-app="pretty">
+    <div ng-controller="Jobs" class="jobs">
+      <accordion>
+        <accordion-group is-open="status.open" ng-repeat="item in jobs">
+          <accordion-heading class="heading">
+            <i class="col-xs-1 pull-left glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+            {{item.name}}
+            <button class="btn btn-danger center-block btn-xs pull-right" ng-click="delete(item.name)">
+            <span class="glyphicon glyphicon-fire"></span> Delete!
+            </button>
+          </accordion-heading>
+          <form ng-submit="submit($index)">
+            <div id="name-group" class="form-group">
+              <label>Name</label>
+              <input type="text" name="name" class="form-control" placeholder="" ng-model="item.name">
+              <span class="help-block"></span>
+            </div>
+            
+            <div id="superhero-group" class="form-group">
+              <label>Schedule</label>
+              <input type="text" name="superheroAlias" class="form-control" placeholder="" ng-model="item.schedule">
+              <span class="help-block"></span>
+            </div>
+            <button type="submit" class="btn btn-success btn-lg btn-block">
+            <span class="glyphicon glyphicon-flash"></span> Submit!
+            </button>
+          </form>
+<pre>
+    {{ item }}
+</pre>
+        </accordion-group>
+      </accordion>
+    </div>
+    
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-ui-utils/ui-utils.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
