@@ -37,6 +37,16 @@
   fill: lightgreen;
 }
 
+.success {
+  stroke: blue;
+  fill: lightblue;
+}
+
+.failure {
+  stroke: #ff0000;
+  fill: #ff9999;
+}
+
 .brush .extent {
   stroke: gray;
   fill: blue;

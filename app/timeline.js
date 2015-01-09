@@ -3,8 +3,6 @@ var data = getTimelineData()//randomData()
   , items = data.items
   , now = new Date();
 
-console.log(data);
-
 var margin = {top: 20, right: 0, bottom: 15, left: 200}
   , width = 960 - margin.left - margin.right
   , height = 500 - margin.top - margin.bottom
@@ -236,14 +234,15 @@ function display () {
   rects = itemRects.selectAll('rect')
     .data(visItems, function (d) { return d.id; })
     .attr('x', function(d) { return x1(d.start); })
-    .attr('width', function(d) { return x1(d.end) - x1(d.start); });
+    .attr('width', function(d) { return x1(d.end) - x1(d.start); })
+    .on('click', function(d){console.log(d.id);});
 
   rects.enter().append('rect')
     .attr('x', function(d) { return x1(d.start); })
     .attr('y', function(d) { return y1(d.lane) + .1 * y1(1) + 0.5; })
     .attr('width', function(d) { return x1(d.end) - x1(d.start); })
     .attr('height', function(d) { return .8 * y1(1); })
-    .attr('class', function(d) { return 'mainItem ' + d.class; });
+    .attr('class', function(d) { return 'mainItem ' + d.status; });
 
   rects.exit().remove();
 
@@ -252,8 +251,9 @@ function display () {
     .data(visItems, function (d) { return d.id; })
     .attr('x', function(d) { return x1(Math.max(d.start, minExtent)) + 2; });
 
+  var fmt = d3.time.format("%I:%M %p");
   labels.enter().append('text')
-    .text(function (d) { return 'Item\n\n\n\n Id: ' + d.id; })
+    .text(function (d) { return fmt(d.start); })
     .attr('x', function(d) { return x1(Math.max(d.start, minExtent)) + 2; })
     .attr('y', function(d) { return y1(d.lane) + .4 * y1(1) + 0.5; })
     .attr('text-anchor', 'start')
