@@ -1,19 +1,22 @@
-var data = randomData()
+var data = getTimelineData()//randomData()
   , lanes = data.lanes
   , items = data.items
   , now = new Date();
 
-var margin = {top: 20, right: 15, bottom: 15, left: 60}
+console.log(data);
+
+var margin = {top: 20, right: 0, bottom: 15, left: 200}
   , width = 960 - margin.left - margin.right
   , height = 500 - margin.top - margin.bottom
   , miniHeight = lanes.length * 12 + 50
   , mainHeight = height - miniHeight - 50;
 
+var begin = d3.time.sunday(d3.min(items, function(d) { return d.start; })),
+    last = d3.max(items, function(d) { return d.end; }),
+    finish = new Date(last.getTime() + (1000 * 60 * 60 * 24));
+
 var x = d3.time.scale()
-  .domain([
-    d3.time.sunday(d3.min(items, function(d) { return d.start; })),
-    d3.max(items, function(d) { return d.end; })
-    ])
+  .domain([ begin, finish ])
   .range([0, width]);
 
 var x1 = d3.time.scale().range([0, width]);
@@ -172,10 +175,13 @@ mini.append('rect')
   .attr('visibility', 'hidden')
   .on('mouseup', moveBrush);
 
+var brushStart = new Date(Date.now() - 1000 * 60 * 60 * 24 * 2)
+   ,brushEnd = new Date(Date.now() + 1000 * 60 * 60 * 6);
+
 // draw the selection area
 var brush = d3.svg.brush()
               .x(x)
-              .extent([d3.time.monday(now),d3.time.saturday.ceil(now)])
+              .extent([brushStart, brushEnd])
               .on("brush", display);
 
 mini.append('g')
@@ -190,8 +196,8 @@ display();
 
 function display () {
   var rects, labels
-    , minExtent = d3.time.day(brush.extent()[0])
-    , maxExtent = d3.time.day(brush.extent()[1])
+    , minExtent = d3.time.minute(brush.extent()[0])
+    , maxExtent = d3.time.minute(brush.extent()[1])
     , visItems = items.filter(function (d) { return d.start < maxExtent && d.end > minExtent});
 
   mini.select('.brush').call(brush.extent([minExtent, maxExtent]));
